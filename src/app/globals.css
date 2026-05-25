@@ -1,0 +1,324 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f3f5f2;
+  --foreground: #151817;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.nav-link {
+  border: 1px solid rgba(21, 24, 23, 0.14);
+  color: #151817;
+  padding: 0.65rem 0.9rem;
+}
+
+.button-primary,
+.button-secondary,
+.form-panel button,
+.approval-actions button {
+  align-items: center;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 900;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0.85rem 1.2rem;
+}
+
+.button-primary,
+.form-panel button,
+.approval-actions button {
+  background: #b42318;
+  color: #fff;
+}
+
+.button-secondary,
+.ghost-button {
+  background: #151817;
+  color: #fff;
+}
+
+.tag {
+  border: 1px solid rgba(21, 24, 23, 0.18);
+  color: #424846;
+  font-size: 0.78rem;
+  font-weight: 900;
+  padding: 0.55rem 0.75rem;
+  text-transform: uppercase;
+}
+
+.track-visual {
+  align-items: end;
+  display: grid;
+  min-height: 20rem;
+  position: relative;
+}
+
+.track-line {
+  border: 1.6rem solid #f8fafc;
+  border-left-color: #b42318;
+  border-radius: 999px;
+  height: 16rem;
+  transform: rotate(-18deg);
+  width: min(90%, 34rem);
+}
+
+.timing-board {
+  background: #f8fafc;
+  color: #151817;
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  position: absolute;
+  right: 0;
+  top: 1rem;
+}
+
+.timing-board span,
+.race-card span,
+.stat-card span,
+.approval-item span,
+.back-link {
+  color: #b42318;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.timing-board strong {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  font-weight: 1000;
+}
+
+.race-card,
+.panel,
+.form-panel,
+.stat-card,
+.action-card,
+.table-panel,
+.approval-item {
+  background: #fff;
+  border: 1px solid rgba(21, 24, 23, 0.1);
+}
+
+.race-card {
+  color: #151817;
+  padding: 1rem;
+}
+
+.race-card h2 {
+  font-size: 1.05rem;
+  font-weight: 950;
+  margin: 0.55rem 0 0.35rem;
+}
+
+.race-card p,
+.standing-row p,
+.approval-item p {
+  color: #5b625f;
+  margin: 0;
+}
+
+.panel {
+  color: #151817;
+  padding: 1.1rem;
+}
+
+.standing-row {
+  align-items: center;
+  border-top: 1px solid rgba(21, 24, 23, 0.1);
+  display: grid;
+  gap: 0.8rem;
+  grid-template-columns: 2.25rem 1fr auto;
+  padding-top: 0.85rem;
+}
+
+.rank,
+.points {
+  font-weight: 950;
+}
+
+.page-shell {
+  margin: 0 auto;
+  max-width: 1180px;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.section-header {
+  display: grid;
+  gap: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+.section-header h1 {
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
+  font-weight: 1000;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.form-grid,
+.stat-grid,
+.action-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.form-panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.form-panel.wide {
+  max-width: 760px;
+}
+
+.form-panel h2 {
+  margin: 0;
+}
+
+.form-panel label {
+  color: #424846;
+  display: grid;
+  font-size: 0.9rem;
+  font-weight: 800;
+  gap: 0.45rem;
+}
+
+.form-panel input,
+.form-panel textarea {
+  border: 1px solid rgba(21, 24, 23, 0.18);
+  min-height: 3rem;
+  padding: 0.8rem;
+}
+
+.form-panel textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.stat-card,
+.action-card {
+  color: #151817;
+  display: grid;
+  gap: 0.75rem;
+  min-height: 9rem;
+  padding: 1.25rem;
+}
+
+.stat-card strong {
+  font-size: 3rem;
+  font-weight: 1000;
+}
+
+.action-card {
+  align-content: end;
+  font-size: 1.35rem;
+  font-weight: 950;
+}
+
+.table-panel {
+  overflow-x: auto;
+}
+
+.table-row {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 4rem minmax(10rem, 1fr) minmax(10rem, 1fr) 4rem 5rem;
+  min-width: 680px;
+  padding: 1rem;
+}
+
+.table-row + .table-row {
+  border-top: 1px solid rgba(21, 24, 23, 0.1);
+}
+
+.table-head {
+  background: #151817;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.approval-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.approval-item {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.approval-item strong {
+  display: block;
+  font-size: 1.4rem;
+  margin: 0.35rem 0;
+}
+
+.approval-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    padding: 1rem;
+  }
+
+  .approval-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .approval-actions {
+    justify-content: stretch;
+  }
+
+  .approval-actions button {
+    flex: 1;
+  }
+}
