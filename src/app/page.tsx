@@ -43,10 +43,11 @@ export default async function Home() {
           <section className="hero-crest" aria-label="Ultimate Racing League brand">
             <div className="crest-orbit">
               <Image
-                src="/url-logo-standard.png"
-                alt="Ultimate Racing League shield logo"
+                src="/url-logo-motion.gif"
+                alt="Animated Ultimate Racing League 3D shield logo"
                 width={520}
                 height={520}
+                unoptimized
                 priority
               />
             </div>
