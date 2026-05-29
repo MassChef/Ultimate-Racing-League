@@ -1,27 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
+import { defaultHomepageContent, normalizeHomepageContent } from "@/lib/site-content";
+import { supabase } from "@/lib/supabase";
 
-const leaderboard = [
-  { rank: "01", driver: "Maya Cross", track: "Queens Circuit", time: "01:28.442" },
-  { rank: "02", driver: "Andre Vale", track: "Manhattan Sprint", time: "01:29.118" },
-  { rank: "03", driver: "Tessa King", track: "Bronx Loop", time: "01:29.604" },
-  { rank: "04", driver: "Jon Bell", track: "Brooklyn Dash", time: "01:30.021" },
-];
+export const revalidate = 60;
 
-const signals = [
-  ["API Source", "Upland.me"],
-  ["Publishing", "Live Results"],
-  ["League Focus", "Race Times"],
-  ["Format", "Esports Motorsport"],
-];
+async function getHomepageContent() {
+  const { data, error } = await supabase
+    .from("site_content")
+    .select("content")
+    .eq("key", "homepage")
+    .maybeSingle();
 
-const raceCards = [
-  { label: "Latest Sync", value: "Ready for API", detail: "Awaiting Upland endpoint connection" },
-  { label: "Timing Model", value: "Fastest Wins", detail: "Custom rankings by time, track, and season" },
-  { label: "Public Access", value: "Open Grid", detail: "Results and leaderboards visible to every fan" },
-];
+  if (error) {
+    return defaultHomepageContent;
+  }
 
-export default function Home() {
+  return normalizeHomepageContent(data?.content);
+}
+
+export default async function Home() {
+  const content = await getHomepageContent();
+
   return (
     <main className="site-shell">
       <section className="hero-stage">
@@ -45,19 +45,15 @@ export default function Home() {
 
         <div className="hero-grid">
           <section className="hero-copy">
-            <p className="eyebrow">Upland.me Racing Intelligence</p>
-            <h1>Professional esports timing for the URL grid.</h1>
-            <p className="hero-summary">
-              Ultimate Racing League turns Upland race data into public results,
-              custom time-based leaderboards, team standings, and a motorsport
-              broadcast experience built around the official URL identity.
-            </p>
+            <p className="eyebrow">{content.eyebrow}</p>
+            <h1>{content.headline}</h1>
+            <p className="hero-summary">{content.summary}</p>
             <div className="hero-actions">
               <Link className="button-primary" href="/leaderboard">
-                View leaderboard
+                {content.primaryCta}
               </Link>
               <Link className="button-secondary" href="/dashboard">
-                League dashboard
+                {content.secondaryCta}
               </Link>
             </div>
           </section>
@@ -73,15 +69,15 @@ export default function Home() {
               />
             </div>
             <div className="broadcast-strip">
-              <span>Est. 2022</span>
-              <strong>Live Timing Era</strong>
+              <span>{content.broadcastLabel}</span>
+              <strong>{content.broadcastValue}</strong>
             </div>
           </section>
         </div>
       </section>
 
       <section className="signal-grid" aria-label="League platform signals">
-        {signals.map(([label, value]) => (
+        {content.signals.map(({ label, value }) => (
           <article key={label}>
             <span>{label}</span>
             <strong>{value}</strong>
@@ -91,12 +87,12 @@ export default function Home() {
 
       <section className="content-band">
         <div className="section-heading">
-          <p className="eyebrow">Race Control</p>
-          <h2>Built for API-powered competition.</h2>
+          <p className="eyebrow">{content.raceControlEyebrow}</p>
+          <h2>{content.raceControlHeadline}</h2>
         </div>
 
         <div className="race-card-grid">
-          {raceCards.map((card) => (
+          {content.raceCards.map((card) => (
             <article className="race-card" key={card.label}>
               <span>{card.label}</span>
               <h3>{card.value}</h3>
@@ -109,14 +105,14 @@ export default function Home() {
       <section className="leaderboard-band">
         <div className="leaderboard-heading">
           <div>
-            <p className="eyebrow">Timing Tower</p>
-            <h2>Fastest published race times.</h2>
+            <p className="eyebrow">{content.leaderboardEyebrow}</p>
+            <h2>{content.leaderboardHeadline}</h2>
           </div>
           <Link href="/leaderboard">Full standings</Link>
         </div>
 
         <div className="timing-table">
-          {leaderboard.map((row) => (
+          {content.timingRows.map((row) => (
             <article className="timing-row" key={row.rank}>
               <span>{row.rank}</span>
               <strong>{row.driver}</strong>

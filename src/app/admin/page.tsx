@@ -17,6 +17,10 @@ export default function AdminPage() {
       </div>
 
       <section className="approval-list">
+        <Link className="action-card" href="/admin/content">
+          Edit Homepage Content
+        </Link>
+
         {queue.map(([race, driver, time]) => (
           <article className="approval-item" key={`${race}-${driver}`}>
             <div>
