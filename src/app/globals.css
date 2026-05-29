@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f3f5f2;
-  --foreground: #151817;
+  --background: #0f1010;
+  --foreground: #f7f7f4;
+  --ink: #111;
+  --paper: #f7f7f4;
+  --steel: #8b8f8d;
+  --line: rgba(247, 247, 244, 0.16);
+  --accent: #d6d6d0;
 }
 
 @theme inline {
@@ -28,6 +33,7 @@ body {
 }
 
 a {
+  color: inherit;
   text-decoration: none;
 }
 
@@ -37,10 +43,156 @@ textarea {
   font: inherit;
 }
 
+.site-shell {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+    #0f1010;
+  background-size: 42px 42px;
+  min-height: 100vh;
+}
+
+.hero-stage {
+  min-height: 88vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-stage::before {
+  background:
+    linear-gradient(45deg, #f7f7f4 25%, transparent 25%),
+    linear-gradient(-45deg, #f7f7f4 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #f7f7f4 75%),
+    linear-gradient(-45deg, transparent 75%, #f7f7f4 75%);
+  background-color: #111;
+  background-position:
+    0 0,
+    0 14px,
+    14px -14px,
+    -14px 0;
+  background-size: 28px 28px;
+  content: "";
+  height: 0.6rem;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.hero-stage::after {
+  background: linear-gradient(115deg, transparent 0 42%, rgba(247, 247, 244, 0.08) 42% 55%, transparent 55%);
+  bottom: 0;
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  right: -12vw;
+  top: 0;
+  width: 55vw;
+}
+
+.topbar {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1.4rem clamp(1rem, 4vw, 4rem);
+  position: relative;
+  z-index: 2;
+}
+
+.brand-lockup {
+  align-items: center;
+  display: flex;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.brand-lockup img {
+  height: 4rem;
+  object-fit: contain;
+  width: 4rem;
+}
+
+.brand-lockup span {
+  font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+  font-weight: 1000;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.topbar-links {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: flex-end;
+}
+
+.topbar-links a,
 .nav-link {
-  border: 1px solid rgba(21, 24, 23, 0.14);
-  color: #151817;
-  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 0.7rem 0.85rem;
+  text-transform: uppercase;
+}
+
+.hero-grid {
+  align-items: center;
+  display: grid;
+  gap: clamp(2rem, 6vw, 6rem);
+  grid-template-columns: minmax(0, 1.03fr) minmax(18rem, 0.97fr);
+  margin: 0 auto;
+  max-width: 1440px;
+  min-height: calc(88vh - 7rem);
+  padding: clamp(1.5rem, 4vw, 4rem);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-copy {
+  max-width: 760px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 1000;
+  letter-spacing: 0.18em;
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+}
+
+.hero-copy h1,
+.section-heading h2,
+.leaderboard-heading h2 {
+  font-size: clamp(3.4rem, 8vw, 7.8rem);
+  font-weight: 1000;
+  letter-spacing: 0;
+  line-height: 0.86;
+  margin: 0;
+  max-width: 900px;
+  text-transform: uppercase;
+}
+
+.hero-summary {
+  color: #d7d9d5;
+  font-size: clamp(1.05rem, 1.8vw, 1.3rem);
+  font-weight: 600;
+  line-height: 1.65;
+  margin: 2rem 0 0;
+  max-width: 690px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2.4rem;
+}
+
+.nav-link {
 }
 
 .button-primary,
@@ -54,20 +206,151 @@ textarea {
   font-weight: 900;
   justify-content: center;
   min-height: 3.25rem;
-  padding: 0.85rem 1.2rem;
+  padding: 0.9rem 1.2rem;
+  text-transform: uppercase;
 }
 
 .button-primary,
 .form-panel button,
 .approval-actions button {
-  background: #b42318;
-  color: #fff;
+  background: var(--paper);
+  color: var(--ink);
 }
 
 .button-secondary,
 .ghost-button {
-  background: #151817;
-  color: #fff;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--paper);
+}
+
+.hero-crest {
+  align-items: center;
+  display: grid;
+  justify-items: center;
+  min-height: 36rem;
+  position: relative;
+}
+
+.crest-orbit {
+  align-items: center;
+  background: radial-gradient(circle, rgba(247, 247, 244, 0.12), transparent 62%);
+  display: grid;
+  justify-items: center;
+  position: relative;
+  width: min(100%, 42rem);
+}
+
+.crest-orbit::before,
+.crest-orbit::after {
+  border: 1px solid rgba(247, 247, 244, 0.2);
+  content: "";
+  position: absolute;
+}
+
+.crest-orbit::before {
+  height: 72%;
+  transform: rotate(-8deg);
+  width: 92%;
+}
+
+.crest-orbit::after {
+  height: 55%;
+  transform: rotate(13deg);
+  width: 78%;
+}
+
+.crest-orbit img {
+  filter: drop-shadow(0 2rem 3rem rgba(0, 0, 0, 0.6));
+  height: auto;
+  max-width: min(34rem, 92vw);
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+.broadcast-strip {
+  align-items: center;
+  background: var(--paper);
+  bottom: 3rem;
+  color: var(--ink);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  min-width: min(26rem, 90%);
+  padding: 0.95rem 1rem;
+  position: absolute;
+  z-index: 2;
+}
+
+.broadcast-strip span {
+  color: #555;
+  font-size: 0.78rem;
+  font-weight: 1000;
+  text-transform: uppercase;
+}
+
+.broadcast-strip strong {
+  font-weight: 1000;
+  text-transform: uppercase;
+}
+
+.signal-grid {
+  border-block: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.signal-grid article {
+  border-right: 1px solid var(--line);
+  display: grid;
+  gap: 0.4rem;
+  min-height: 9rem;
+  padding: 1.2rem clamp(1rem, 3vw, 2rem);
+}
+
+.signal-grid article:last-child {
+  border-right: 0;
+}
+
+.signal-grid span,
+.race-card span {
+  color: var(--steel);
+  font-size: 0.72rem;
+  font-weight: 1000;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.signal-grid strong {
+  align-self: end;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 1000;
+  text-transform: uppercase;
+}
+
+.content-band,
+.leaderboard-band {
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: clamp(3rem, 7vw, 6rem) clamp(1rem, 4vw, 4rem);
+}
+
+.section-heading {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.section-heading h2,
+.leaderboard-heading h2 {
+  font-size: clamp(2.4rem, 5vw, 5rem);
+}
+
+.race-card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .tag {
@@ -135,20 +418,79 @@ textarea {
 }
 
 .race-card {
-  color: #151817;
-  padding: 1rem;
+  background: #f7f7f4;
+  color: var(--ink);
+  min-height: 15rem;
+  padding: 1.15rem;
 }
 
-.race-card h2 {
-  font-size: 1.05rem;
-  font-weight: 950;
-  margin: 0.55rem 0 0.35rem;
+.race-card h3 {
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 1000;
+  line-height: 0.92;
+  margin: 2rem 0 0.85rem;
+  text-transform: uppercase;
 }
 
 .race-card p,
 .standing-row p,
 .approval-item p {
   color: #5b625f;
+  margin: 0;
+}
+
+.leaderboard-band {
+  padding-top: 0;
+}
+
+.leaderboard-heading {
+  align-items: end;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.leaderboard-heading a {
+  border: 1px solid var(--line);
+  color: var(--paper);
+  font-size: 0.82rem;
+  font-weight: 1000;
+  padding: 0.8rem 0.95rem;
+  text-transform: uppercase;
+}
+
+.timing-table {
+  border: 1px solid var(--line);
+}
+
+.timing-row {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 4rem minmax(9rem, 1fr) minmax(10rem, 1fr) 8rem;
+  padding: 1rem;
+}
+
+.timing-row + .timing-row {
+  border-top: 1px solid var(--line);
+}
+
+.timing-row span,
+.timing-row time {
+  color: var(--accent);
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 900;
+}
+
+.timing-row strong {
+  font-size: clamp(1.2rem, 2vw, 1.7rem);
+  font-weight: 1000;
+  text-transform: uppercase;
+}
+
+.timing-row p {
+  color: #c1c4bf;
   margin: 0;
 }
 
@@ -305,6 +647,48 @@ textarea {
 }
 
 @media (max-width: 640px) {
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .topbar-links {
+    justify-content: flex-start;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    padding-top: 2rem;
+  }
+
+  .hero-crest {
+    min-height: 27rem;
+  }
+
+  .signal-grid,
+  .race-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .signal-grid article {
+    border-bottom: 1px solid var(--line);
+    border-right: 0;
+  }
+
+  .leaderboard-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .timing-row {
+    grid-template-columns: 3rem 1fr;
+  }
+
+  .timing-row p,
+  .timing-row time {
+    grid-column: 2;
+  }
+
   .page-shell {
     padding: 1rem;
   }
