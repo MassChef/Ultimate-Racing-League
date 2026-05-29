@@ -50,10 +50,6 @@ export default async function Home() {
                 priority
               />
             </div>
-            <div className="broadcast-strip">
-              <span>{content.broadcastLabel}</span>
-              <strong>{content.broadcastValue}</strong>
-            </div>
           </section>
         </div>
       </section>

@@ -235,26 +235,6 @@ export default function AdminContentPage() {
         </section>
 
         <section className="editor-section">
-          <h2>Broadcast Strip</h2>
-          <div className="form-grid">
-            <label>
-              Small label
-              <input
-                value={content.broadcastLabel}
-                onChange={(event) => updateField("broadcastLabel", event.target.value)}
-              />
-            </label>
-            <label>
-              Main text
-              <input
-                value={content.broadcastValue}
-                onChange={(event) => updateField("broadcastValue", event.target.value)}
-              />
-            </label>
-          </div>
-        </section>
-
-        <section className="editor-section">
           <h2>Race Control Section</h2>
           <div className="form-grid">
             <label>

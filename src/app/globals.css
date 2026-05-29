@@ -280,32 +280,6 @@ textarea {
   z-index: 1;
 }
 
-.broadcast-strip {
-  align-items: center;
-  background: var(--paper);
-  bottom: 3rem;
-  color: var(--ink);
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
-  min-width: min(26rem, 90%);
-  padding: 0.95rem 1rem;
-  position: absolute;
-  z-index: 2;
-}
-
-.broadcast-strip span {
-  color: #555;
-  font-size: 0.78rem;
-  font-weight: 1000;
-  text-transform: uppercase;
-}
-
-.broadcast-strip strong {
-  font-weight: 1000;
-  text-transform: uppercase;
-}
-
 .signal-grid {
   border-block: 1px solid var(--line);
   display: grid;
