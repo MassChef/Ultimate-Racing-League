@@ -555,6 +555,36 @@ textarea {
   margin: 0;
 }
 
+.auth-tabs {
+  border: 1px solid rgba(21, 24, 23, 0.12);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.auth-tabs button {
+  background: #f7f7f4;
+  border: 0;
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 1000;
+  min-height: 3rem;
+  text-transform: uppercase;
+}
+
+.auth-tabs button + button {
+  border-left: 1px solid rgba(21, 24, 23, 0.12);
+}
+
+.auth-tabs .active {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.auth-form {
+  display: grid;
+  gap: 1rem;
+}
+
 .form-panel label {
   color: #424846;
   display: grid;
@@ -573,6 +603,19 @@ textarea {
 .form-panel textarea {
   min-height: 8rem;
   resize: vertical;
+}
+
+.form-panel button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.form-status {
+  border: 1px solid rgba(21, 24, 23, 0.12);
+  color: #424846;
+  font-weight: 800;
+  margin: 0;
+  padding: 0.85rem;
 }
 
 .stat-card,
