@@ -30,9 +30,26 @@ Teams represent organized groups of drivers. Team pages should show roster, vehi
 
 Admins manage league structure, configure leaderboard rules, manage featured races or seasons, and resolve any data mapping issues between Upland.me API records and Ultimate Racing League profiles.
 
+### Owners
+
+Owners operate the league at the business and platform level. Owners can manage site content, league configuration, sponsors, teams, and admin-level workflows. Owner access should be treated as management access alongside Admin.
+
 ### Fans and Sponsors
 
 Fans and sponsors should be able to follow races, rankings, teams, and drivers through a polished esports-style public experience.
+
+Sponsors are official league partners. Sponsor accounts should eventually manage sponsor profile information, brand placements, campaign assets, and visibility across public league pages without needing full Admin or Owner access.
+
+### Role Tree
+
+Ultimate Racing League uses four core account roles:
+
+- Admin: platform operations, content management, API sync oversight, race data correction, and role management.
+- Owner: league ownership, business configuration, sponsor oversight, and full management access.
+- Sponsor: sponsor profile, sponsor assets, campaign visibility, and limited partner dashboard access.
+- Driver: personal racing profile, team affiliation, race history, rankings, and claimable Upland identity.
+
+Admin and Owner roles can access management dashboards. Sponsor and Driver roles should receive tailored dashboard experiences without site-wide management permissions.
 
 ## 4. Core Product Experience
 
@@ -51,6 +68,8 @@ Early account features may include admin access, profile claiming, team manageme
 The dashboard should eventually adapt to the signed-in user role:
 
 - Drivers see their race history, rankings, claimed profile, and team status.
+- Sponsors see sponsor profile status, placements, and campaign assets.
+- Owners see business settings, sponsor management, site content, and league administration.
 - Team owners see roster and team leaderboard data.
 - Admins see configuration, API sync status, and data management tools.
 

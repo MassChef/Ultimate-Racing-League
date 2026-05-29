@@ -2,17 +2,18 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { canManageSite, formatRole, getUserRole, SiteRole } from "@/lib/roles";
 import { supabase } from "@/lib/supabase";
 
 type AuthState = {
   email: string | null;
-  isAdmin: boolean;
+  role: SiteRole | null;
 };
 
 export function AuthNav() {
   const [authState, setAuthState] = useState<AuthState>({
     email: null,
-    isAdmin: false,
+    role: null,
   });
 
   useEffect(() => {
@@ -22,19 +23,15 @@ export function AuthNav() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        setAuthState({ email: null, isAdmin: false });
+        setAuthState({ email: null, role: null });
         return;
       }
 
-      const { data } = await supabase
-        .from("admin_users")
-        .select("user_id")
-        .eq("user_id", user.id)
-        .maybeSingle();
+      const role = await getUserRole(user.id);
 
       setAuthState({
         email: user.email ?? "Signed in",
-        isAdmin: Boolean(data),
+        role,
       });
     }
 
@@ -51,7 +48,7 @@ export function AuthNav() {
 
   async function handleLogout() {
     await supabase.auth.signOut();
-    setAuthState({ email: null, isAdmin: false });
+    setAuthState({ email: null, role: null });
   }
 
   if (!authState.email) {
@@ -68,7 +65,8 @@ export function AuthNav() {
     <div className="topbar-links">
       <Link href="/leaderboard">Standings</Link>
       <Link href="/dashboard">Dashboard</Link>
-      {authState.isAdmin ? <Link href="/admin">Admin</Link> : null}
+      {canManageSite(authState.role) ? <Link href="/admin">Admin</Link> : null}
+      {authState.role ? <span>{formatRole(authState.role)}</span> : null}
       <button type="button" onClick={handleLogout}>
         Logout
       </button>

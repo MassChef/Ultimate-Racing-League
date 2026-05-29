@@ -10,6 +10,18 @@ create table if not exists admin_users (
   created_at timestamptz not null default now()
 );
 
+create table if not exists user_roles (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  role text not null check (role in ('admin', 'owner', 'sponsor', 'driver')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+insert into user_roles (user_id, role)
+select user_id, 'admin'
+from admin_users
+on conflict (user_id) do nothing;
+
 create table if not exists site_content (
   key text primary key,
   content jsonb not null,
@@ -136,6 +148,7 @@ create table if not exists leaderboards (
 );
 
 alter table admin_users enable row level security;
+alter table user_roles enable row level security;
 alter table site_content enable row level security;
 alter table profiles enable row level security;
 alter table teams enable row level security;
@@ -151,8 +164,9 @@ security definer
 set search_path = public
 as $$
   select exists (
-    select 1 from public.admin_users
+    select 1 from public.user_roles
     where user_id = auth.uid()
+      and role in ('admin', 'owner')
   );
 $$;
 
@@ -161,6 +175,25 @@ create policy "Admins can read admin users"
 on admin_users for select
 to authenticated
 using (user_id = auth.uid() or public.is_admin());
+
+drop policy if exists "Users can read their role" on user_roles;
+create policy "Users can read their role"
+on user_roles for select
+to authenticated
+using (user_id = auth.uid() or public.is_admin());
+
+drop policy if exists "Admins can insert roles" on user_roles;
+create policy "Admins can insert roles"
+on user_roles for insert
+to authenticated
+with check (public.is_admin());
+
+drop policy if exists "Admins can update roles" on user_roles;
+create policy "Admins can update roles"
+on user_roles for update
+to authenticated
+using (public.is_admin())
+with check (public.is_admin());
 
 drop policy if exists "Public can read site content" on site_content;
 create policy "Public can read site content"

@@ -130,6 +130,7 @@ textarea {
 
 .topbar-links a,
 .topbar-links button,
+.topbar-links span,
 .nav-link {
   background: transparent;
   border: 1px solid var(--line);
@@ -139,6 +140,10 @@ textarea {
   font-weight: 900;
   padding: 0.7rem 0.85rem;
   text-transform: uppercase;
+}
+
+.topbar-links span {
+  cursor: default;
 }
 
 .hero-grid {

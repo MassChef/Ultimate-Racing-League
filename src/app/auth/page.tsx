@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { canManageSite, getUserRole } from "@/lib/roles";
 import { supabase } from "@/lib/supabase";
 
 type AuthMode = "login" | "register";
@@ -54,14 +55,10 @@ export default function AuthPage() {
       return;
     }
 
-    const { data } = await supabase
-      .from("admin_users")
-      .select("user_id")
-      .eq("user_id", userId)
-      .maybeSingle();
+    const role = await getUserRole(userId);
 
     setStatus("Logged in successfully.");
-    router.push(data ? "/admin" : "/dashboard");
+    router.push(canManageSite(role) ? "/admin" : "/dashboard");
   }
 
   return (

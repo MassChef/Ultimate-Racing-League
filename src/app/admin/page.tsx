@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { canManageSite, formatRole, getUserRole, SiteRole } from "@/lib/roles";
 import { supabase } from "@/lib/supabase";
 
 const queue = [
@@ -10,10 +11,11 @@ const queue = [
   ["Summit Sprint", "Nadia Stone", "03:42.109"],
 ];
 
-type AdminState = "loading" | "signed-out" | "not-admin" | "admin";
+type AdminState = "loading" | "signed-out" | "not-manager" | "manager";
 
 export default function AdminPage() {
   const [adminState, setAdminState] = useState<AdminState>("loading");
+  const [role, setRole] = useState<SiteRole | null>(null);
 
   useEffect(() => {
     async function loadAdminState() {
@@ -26,19 +28,16 @@ export default function AdminPage() {
         return;
       }
 
-      const { data } = await supabase
-        .from("admin_users")
-        .select("user_id")
-        .eq("user_id", user.id)
-        .maybeSingle();
+      const userRole = await getUserRole(user.id);
 
-      setAdminState(data ? "admin" : "not-admin");
+      setRole(userRole);
+      setAdminState(canManageSite(userRole) ? "manager" : "not-manager");
     }
 
     loadAdminState();
   }, []);
 
-  if (adminState !== "admin") {
+  if (adminState !== "manager") {
     return (
       <main className="page-shell">
         <div className="section-header">
@@ -54,14 +53,14 @@ export default function AdminPage() {
               ? "Checking access"
               : adminState === "signed-out"
                 ? "Login required"
-                : "Admin access required"}
+                : "Admin or Owner access required"}
           </h2>
           <p className="form-status">
             {adminState === "loading"
               ? "Checking your URL role..."
               : adminState === "signed-out"
                 ? "Log in with an admin account to manage the site."
-                : "Your account is signed in, but it is not marked as a URL admin."}
+                : "Your account is signed in, but it is not marked as Admin or Owner."}
           </p>
           <Link className="button-primary" href="/auth">
             Go to login
@@ -78,6 +77,7 @@ export default function AdminPage() {
           Ultimate Racing League
         </Link>
         <h1>Admin Dashboard</h1>
+        {role ? <p className="form-status">Signed in as {formatRole(role)}.</p> : null}
       </div>
 
       <section className="approval-list">
