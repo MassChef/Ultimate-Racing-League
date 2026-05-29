@@ -248,6 +248,7 @@ textarea {
   background: radial-gradient(circle, rgba(247, 247, 244, 0.12), transparent 62%);
   display: grid;
   justify-items: center;
+  perspective: 1200px;
   position: relative;
   width: min(100%, 42rem);
 }
@@ -276,6 +277,9 @@ textarea {
   height: auto;
   max-width: min(34rem, 92vw);
   position: relative;
+  transform: rotateY(-5deg);
+  transform-origin: center;
+  transform-style: preserve-3d;
   width: 100%;
   z-index: 1;
 }
