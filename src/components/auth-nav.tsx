@@ -54,6 +54,7 @@ export function AuthNav() {
   if (!authState.email) {
     return (
       <div className="topbar-links">
+        <Link href="/">Home</Link>
         <Link href="/leaderboard">Standings</Link>
         <Link href="/dashboard">Dashboard</Link>
         <Link href="/auth">Login</Link>
@@ -63,9 +64,11 @@ export function AuthNav() {
 
   return (
     <div className="topbar-links">
+      <Link href="/">Home</Link>
       <Link href="/leaderboard">Standings</Link>
       <Link href="/dashboard">Dashboard</Link>
       {canManageSite(authState.role) ? <Link href="/admin">Admin</Link> : null}
+      {authState.role === "sponsor" ? <Link href="/sponsor">Sponsor</Link> : null}
       {authState.role ? <span>{formatRole(authState.role)}</span> : null}
       <button type="button" onClick={handleLogout}>
         Logout

@@ -90,14 +90,17 @@ textarea {
   width: 55vw;
 }
 
-.topbar {
+.site-header {
   align-items: center;
+  background: rgba(15, 16, 16, 0.94);
+  border-bottom: 1px solid var(--line);
   display: flex;
   gap: 1rem;
   justify-content: space-between;
   padding: 1.4rem clamp(1rem, 4vw, 4rem);
-  position: relative;
-  z-index: 2;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .brand-lockup {
@@ -153,7 +156,7 @@ textarea {
   grid-template-columns: minmax(0, 1.03fr) minmax(18rem, 0.97fr);
   margin: 0 auto;
   max-width: 1440px;
-  min-height: calc(88vh - 7rem);
+  min-height: 88vh;
   padding: clamp(1.5rem, 4vw, 4rem);
   position: relative;
   z-index: 1;
@@ -763,7 +766,7 @@ textarea {
 }
 
 @media (max-width: 640px) {
-  .topbar {
+  .site-header {
     align-items: flex-start;
     flex-direction: column;
   }
