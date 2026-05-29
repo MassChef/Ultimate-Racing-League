@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { canManageSite, formatRole, getUserRole, SiteRole } from "@/lib/roles";
+import { canManageSite, getUserRole, SiteRole } from "@/lib/roles";
 import { supabase } from "@/lib/supabase";
 
 type AuthState = {
@@ -69,7 +69,6 @@ export function AuthNav() {
       <Link href="/dashboard">Dashboard</Link>
       {canManageSite(authState.role) ? <Link href="/admin">Admin</Link> : null}
       {authState.role === "sponsor" ? <Link href="/sponsor">Sponsor</Link> : null}
-      {authState.role ? <span>{formatRole(authState.role)}</span> : null}
       <button type="button" onClick={handleLogout}>
         Logout
       </button>
