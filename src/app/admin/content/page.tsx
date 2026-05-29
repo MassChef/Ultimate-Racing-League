@@ -5,11 +5,16 @@ import { FormEvent, useEffect, useState } from "react";
 import {
   defaultHomepageContent,
   HomepageContent,
+  RaceCard,
+  Signal,
+  TimingRow,
   normalizeHomepageContent,
 } from "@/lib/site-content";
 import { supabase } from "@/lib/supabase";
 
 type SaveState = "idle" | "loading" | "saving";
+
+type EditableList = "signals" | "raceCards" | "timingRows";
 
 export default function AdminContentPage() {
   const [content, setContent] = useState<HomepageContent>(defaultHomepageContent);
@@ -45,20 +50,50 @@ export default function AdminContentPage() {
     }));
   }
 
-  function updateJsonField<T extends "signals" | "raceCards" | "timingRows">(
-    field: T,
+  function updateListItem<T extends EditableList>(
+    list: T,
+    index: number,
+    field: keyof HomepageContent[T][number],
     value: string,
   ) {
-    try {
-      const parsed = JSON.parse(value);
-      setStatus("");
-      setContent((current) => ({
+    setContent((current) => ({
+      ...current,
+      [list]: current[list].map((item, itemIndex) =>
+        itemIndex === index ? { ...item, [field]: value } : item,
+      ),
+    }));
+  }
+
+  function addListItem(list: EditableList) {
+    setContent((current) => {
+      const newItem =
+        list === "signals"
+          ? ({ label: "New Label", value: "New Value" } satisfies Signal)
+          : list === "raceCards"
+            ? ({
+                label: "New Card",
+                value: "Card Title",
+                detail: "Card detail",
+              } satisfies RaceCard)
+            : ({
+                rank: "00",
+                driver: "Driver Name",
+                track: "Track Name",
+                time: "00:00.000",
+              } satisfies TimingRow);
+
+      return {
         ...current,
-        [field]: parsed,
-      }));
-    } catch {
-      setStatus("The JSON field has a formatting issue. Fix it before saving.");
-    }
+        [list]: [...current[list], newItem],
+      };
+    });
+  }
+
+  function removeListItem(list: EditableList, index: number) {
+    setContent((current) => ({
+      ...current,
+      [list]: current[list].filter((_, itemIndex) => itemIndex !== index),
+    }));
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -79,7 +114,7 @@ export default function AdminContentPage() {
       return;
     }
 
-    setStatus("Homepage content saved.");
+    setStatus("Homepage content saved. The public page may take up to 60 seconds to refresh.");
   }
 
   if (saveState === "loading") {
@@ -128,131 +163,275 @@ export default function AdminContentPage() {
       </div>
 
       <form className="form-panel admin-editor" onSubmit={handleSubmit}>
-        <h2>Homepage</h2>
+        <section className="editor-section">
+          <h2>Hero</h2>
 
-        <label>
-          Eyebrow
-          <input
-            value={content.eyebrow}
-            onChange={(event) => updateField("eyebrow", event.target.value)}
-          />
-        </label>
-
-        <label>
-          Headline
-          <textarea
-            value={content.headline}
-            onChange={(event) => updateField("headline", event.target.value)}
-          />
-        </label>
-
-        <label>
-          Summary
-          <textarea
-            value={content.summary}
-            onChange={(event) => updateField("summary", event.target.value)}
-          />
-        </label>
-
-        <div className="form-grid">
           <label>
-            Primary button
+            Eyebrow
             <input
-              value={content.primaryCta}
-              onChange={(event) => updateField("primaryCta", event.target.value)}
+              value={content.eyebrow}
+              onChange={(event) => updateField("eyebrow", event.target.value)}
             />
           </label>
-          <label>
-            Secondary button
-            <input
-              value={content.secondaryCta}
-              onChange={(event) => updateField("secondaryCta", event.target.value)}
-            />
-          </label>
-        </div>
 
-        <div className="form-grid">
           <label>
-            Broadcast label
-            <input
-              value={content.broadcastLabel}
-              onChange={(event) => updateField("broadcastLabel", event.target.value)}
+            Headline
+            <textarea
+              value={content.headline}
+              onChange={(event) => updateField("headline", event.target.value)}
             />
           </label>
-          <label>
-            Broadcast value
-            <input
-              value={content.broadcastValue}
-              onChange={(event) => updateField("broadcastValue", event.target.value)}
-            />
-          </label>
-        </div>
 
-        <div className="form-grid">
           <label>
-            Race control eyebrow
-            <input
-              value={content.raceControlEyebrow}
-              onChange={(event) =>
-                updateField("raceControlEyebrow", event.target.value)
-              }
+            Summary
+            <textarea
+              value={content.summary}
+              onChange={(event) => updateField("summary", event.target.value)}
             />
           </label>
-          <label>
-            Race control headline
-            <input
-              value={content.raceControlHeadline}
-              onChange={(event) =>
-                updateField("raceControlHeadline", event.target.value)
-              }
-            />
-          </label>
-        </div>
+        </section>
 
-        <div className="form-grid">
-          <label>
-            Leaderboard eyebrow
-            <input
-              value={content.leaderboardEyebrow}
-              onChange={(event) =>
-                updateField("leaderboardEyebrow", event.target.value)
-              }
-            />
-          </label>
-          <label>
-            Leaderboard headline
-            <input
-              value={content.leaderboardHeadline}
-              onChange={(event) =>
-                updateField("leaderboardHeadline", event.target.value)
-              }
-            />
-          </label>
-        </div>
+        <section className="editor-section">
+          <h2>Buttons</h2>
+          <div className="form-grid">
+            <label>
+              Primary button label
+              <input
+                value={content.primaryCta}
+                onChange={(event) => updateField("primaryCta", event.target.value)}
+              />
+            </label>
+            <label>
+              Primary button link
+              <input
+                value={content.primaryCtaHref}
+                onChange={(event) =>
+                  updateField("primaryCtaHref", event.target.value)
+                }
+                placeholder="/leaderboard"
+              />
+            </label>
+          </div>
 
-        <label>
-          Signal blocks JSON
-          <textarea
-            value={JSON.stringify(content.signals, null, 2)}
-            onChange={(event) => updateJsonField("signals", event.target.value)}
-          />
-        </label>
+          <div className="form-grid">
+            <label>
+              Secondary button label
+              <input
+                value={content.secondaryCta}
+                onChange={(event) => updateField("secondaryCta", event.target.value)}
+              />
+            </label>
+            <label>
+              Secondary button link
+              <input
+                value={content.secondaryCtaHref}
+                onChange={(event) =>
+                  updateField("secondaryCtaHref", event.target.value)
+                }
+                placeholder="/dashboard"
+              />
+            </label>
+          </div>
+        </section>
 
-        <label>
-          Race cards JSON
-          <textarea
-            value={JSON.stringify(content.raceCards, null, 2)}
-            onChange={(event) => updateJsonField("raceCards", event.target.value)}
-          />
-        </label>
+        <section className="editor-section">
+          <h2>Broadcast Strip</h2>
+          <div className="form-grid">
+            <label>
+              Small label
+              <input
+                value={content.broadcastLabel}
+                onChange={(event) => updateField("broadcastLabel", event.target.value)}
+              />
+            </label>
+            <label>
+              Main text
+              <input
+                value={content.broadcastValue}
+                onChange={(event) => updateField("broadcastValue", event.target.value)}
+              />
+            </label>
+          </div>
+        </section>
 
-        <label>
-          Timing rows JSON
-          <textarea
-            value={JSON.stringify(content.timingRows, null, 2)}
-            onChange={(event) => updateJsonField("timingRows", event.target.value)}
-          />
-        </label>
+        <section className="editor-section">
+          <h2>Race Control Section</h2>
+          <div className="form-grid">
+            <label>
+              Eyebrow
+              <input
+                value={content.raceControlEyebrow}
+                onChange={(event) =>
+                  updateField("raceControlEyebrow", event.target.value)
+                }
+              />
+            </label>
+            <label>
+              Headline
+              <input
+                value={content.raceControlHeadline}
+                onChange={(event) =>
+                  updateField("raceControlHeadline", event.target.value)
+                }
+              />
+            </label>
+          </div>
+        </section>
+
+        <section className="editor-section">
+          <div className="editor-section-header">
+            <h2>Signal Blocks</h2>
+            <button type="button" onClick={() => addListItem("signals")}>
+              Add Signal
+            </button>
+          </div>
+
+          {content.signals.map((signal, index) => (
+            <div className="editor-row" key={`${signal.label}-${index}`}>
+              <label>
+                Label
+                <input
+                  value={signal.label}
+                  onChange={(event) =>
+                    updateListItem("signals", index, "label", event.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Value
+                <input
+                  value={signal.value}
+                  onChange={(event) =>
+                    updateListItem("signals", index, "value", event.target.value)
+                  }
+                />
+              </label>
+              <button type="button" onClick={() => removeListItem("signals", index)}>
+                Remove
+              </button>
+            </div>
+          ))}
+        </section>
+
+        <section className="editor-section">
+          <div className="editor-section-header">
+            <h2>Race Cards</h2>
+            <button type="button" onClick={() => addListItem("raceCards")}>
+              Add Card
+            </button>
+          </div>
+
+          {content.raceCards.map((card, index) => (
+            <div className="editor-row stacked" key={`${card.label}-${index}`}>
+              <div className="form-grid">
+                <label>
+                  Label
+                  <input
+                    value={card.label}
+                    onChange={(event) =>
+                      updateListItem("raceCards", index, "label", event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  Title
+                  <input
+                    value={card.value}
+                    onChange={(event) =>
+                      updateListItem("raceCards", index, "value", event.target.value)
+                    }
+                  />
+                </label>
+              </div>
+              <label>
+                Detail
+                <input
+                  value={card.detail}
+                  onChange={(event) =>
+                    updateListItem("raceCards", index, "detail", event.target.value)
+                  }
+                />
+              </label>
+              <button type="button" onClick={() => removeListItem("raceCards", index)}>
+                Remove Card
+              </button>
+            </div>
+          ))}
+        </section>
+
+        <section className="editor-section">
+          <div className="form-grid">
+            <label>
+              Leaderboard eyebrow
+              <input
+                value={content.leaderboardEyebrow}
+                onChange={(event) =>
+                  updateField("leaderboardEyebrow", event.target.value)
+                }
+              />
+            </label>
+            <label>
+              Leaderboard headline
+              <input
+                value={content.leaderboardHeadline}
+                onChange={(event) =>
+                  updateField("leaderboardHeadline", event.target.value)
+                }
+              />
+            </label>
+          </div>
+
+          <div className="editor-section-header">
+            <h2>Timing Rows</h2>
+            <button type="button" onClick={() => addListItem("timingRows")}>
+              Add Row
+            </button>
+          </div>
+
+          {content.timingRows.map((row, index) => (
+            <div className="editor-row timing-editor-row" key={`${row.rank}-${index}`}>
+              <label>
+                Rank
+                <input
+                  value={row.rank}
+                  onChange={(event) =>
+                    updateListItem("timingRows", index, "rank", event.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Driver
+                <input
+                  value={row.driver}
+                  onChange={(event) =>
+                    updateListItem("timingRows", index, "driver", event.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Track
+                <input
+                  value={row.track}
+                  onChange={(event) =>
+                    updateListItem("timingRows", index, "track", event.target.value)
+                  }
+                />
+              </label>
+              <label>
+                Time
+                <input
+                  value={row.time}
+                  onChange={(event) =>
+                    updateListItem("timingRows", index, "time", event.target.value)
+                  }
+                />
+              </label>
+              <button type="button" onClick={() => removeListItem("timingRows", index)}>
+                Remove
+              </button>
+            </div>
+          ))}
+        </section>
 
         <button type="submit" disabled={saveState === "saving"}>
           {saveState === "saving" ? "Saving..." : "Save homepage content"}

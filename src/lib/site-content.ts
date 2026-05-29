@@ -21,7 +21,9 @@ export type HomepageContent = {
   headline: string;
   summary: string;
   primaryCta: string;
+  primaryCtaHref: string;
   secondaryCta: string;
+  secondaryCtaHref: string;
   broadcastLabel: string;
   broadcastValue: string;
   raceControlEyebrow: string;
@@ -39,7 +41,9 @@ export const defaultHomepageContent: HomepageContent = {
   summary:
     "Ultimate Racing League turns Upland race data into public results, custom time-based leaderboards, team standings, and a motorsport broadcast experience built around the official URL identity.",
   primaryCta: "View leaderboard",
+  primaryCtaHref: "/leaderboard",
   secondaryCta: "League dashboard",
+  secondaryCtaHref: "/dashboard",
   broadcastLabel: "Est. 2022",
   broadcastValue: "Live Timing Era",
   raceControlEyebrow: "Race Control",

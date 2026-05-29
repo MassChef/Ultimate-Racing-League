@@ -46,10 +46,10 @@ export default async function Home() {
             <h1>{content.headline}</h1>
             <p className="hero-summary">{content.summary}</p>
             <div className="hero-actions">
-              <Link className="button-primary" href="/leaderboard">
+              <Link className="button-primary" href={content.primaryCtaHref}>
                 {content.primaryCta}
               </Link>
-              <Link className="button-secondary" href="/dashboard">
+              <Link className="button-secondary" href={content.secondaryCtaHref}>
                 {content.secondaryCta}
               </Link>
             </div>
