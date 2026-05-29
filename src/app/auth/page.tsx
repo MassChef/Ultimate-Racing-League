@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
 type AuthMode = "login" | "register";
 
 export default function AuthPage() {
+  const router = useRouter();
   const [mode, setMode] = useState<AuthMode>("login");
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -39,11 +41,27 @@ export default function AuthPage() {
       return;
     }
 
-    setStatus(
-      mode === "login"
-        ? "Logged in successfully."
-        : "Account created. Check your email if confirmation is enabled.",
-    );
+    if (mode === "register") {
+      setStatus("Account created. Check your email if confirmation is enabled.");
+      return;
+    }
+
+    const userId = response.data.user?.id;
+
+    if (!userId) {
+      setStatus("Logged in successfully.");
+      router.push("/dashboard");
+      return;
+    }
+
+    const { data } = await supabase
+      .from("admin_users")
+      .select("user_id")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    setStatus("Logged in successfully.");
+    router.push(data ? "/admin" : "/dashboard");
   }
 
   return (
@@ -122,6 +140,11 @@ export default function AuthPage() {
 
           {status ? <p className="form-status">{status}</p> : null}
         </form>
+
+        <div className="auth-links">
+          <Link href="/dashboard">Go to dashboard</Link>
+          <Link href="/admin">Go to admin dashboard</Link>
+        </div>
       </section>
     </main>
   );

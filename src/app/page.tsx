@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { AuthNav } from "@/components/auth-nav";
 import { defaultHomepageContent, normalizeHomepageContent } from "@/lib/site-content";
 import { supabase } from "@/lib/supabase";
 
@@ -36,11 +37,7 @@ export default async function Home() {
             />
             <span>Ultimate Racing League</span>
           </Link>
-          <div className="topbar-links">
-            <Link href="/leaderboard">Standings</Link>
-            <Link href="/dashboard">Dashboard</Link>
-            <Link href="/auth">Login</Link>
-          </div>
+          <AuthNav />
         </nav>
 
         <div className="hero-grid">
